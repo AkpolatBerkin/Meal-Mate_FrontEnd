@@ -14,29 +14,27 @@
 </template>
 
 <script setup lang="ts">
-const rezepte = [
-  {
-    name: "Spaghetti Bolognese",
-    kategorie: "Hauptgericht",
-    zubereitung: "Hackfleisch anbraten, Tomatensauce dazugeben, servieren.",
-    dauer: 30,
-    portionen: 2,
-  },
-  {
-    name: "Pfannkuchen",
-    kategorie: "Dessert",
-    zubereitung: "Teig anrühren, in Pfanne goldbraun backen.",
-    dauer: 20,
-    portionen: 4,
-  },
-  {
-    name: "Salat mit Feta",
-    kategorie: "Vorspeise",
-    zubereitung: "Gemüse schneiden, Feta darüber, Dressing dazu.",
-    dauer: 10,
-    portionen: 1,
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
+
+interface Rezept {
+  name: string;
+  kategorie: string;
+  zubereitung: string;
+  dauer: number;
+  portionen: number;
+}
+
+const rezepte = ref<Rezept[]>([])
+
+onMounted(async () => {
+  try {
+    const response = await axios.get('https://meal-mate-backend-3gvc.onrender.com')
+    rezepte.value = response.data
+  } catch (error) {
+    console.error('Fehler beim Laden der Rezepte:', error)
   }
-]
+})
 </script>
 
 <style scoped>

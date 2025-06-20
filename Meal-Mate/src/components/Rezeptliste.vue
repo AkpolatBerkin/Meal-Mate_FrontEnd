@@ -45,7 +45,7 @@ const neuesRezept = ref<Rezept>({
 
 async function ladeRezepte() {
   try {
-    const response = await axios.get('https://meal-mate-backend-3gvc.onrender.com/api/rezept')
+    const response = await axios.get('https://meal-mate-backend-3gvc.onrender.com/api/rezepte')
     rezepte.value = response.data
   } catch (error) {
     console.error('Fehler beim Laden der Rezepte:', error)
@@ -54,7 +54,7 @@ async function ladeRezepte() {
 
 async function rezeptHinzufuegen() {
   try {
-    await axios.post('https://meal-mate-backend-3gvc.onrender.com/api/rezept', neuesRezept.value)
+    await axios.post('https://meal-mate-backend-3gvc.onrender.com/api/rezepte', neuesRezept.value)
     await ladeRezepte()
     neuesRezept.value = { name: '', kategorie: '', zubereitung: '', dauer: 0, portionen: 0 }
   } catch (error) {

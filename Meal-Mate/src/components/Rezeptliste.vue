@@ -69,7 +69,7 @@
           <h3 class="section-title">🔍 Filter</h3>
           <div class="filter-group">
             <label>Kategorie</label>
-            <select v-model="selectedCategory" class="filter-select">
+            <select data-test="filter-select" v-model="selectedCategory" class="filter-select">
               <option value="">Alle Kategorien</option>
               <option v-for="category in categories" :key="category" :value="category">
                 {{ category }}
@@ -300,7 +300,7 @@
             </div>
 
             <div class="recipe-actions">
-              <button class="action-btn view" @click="viewRecipe(rezept)">
+              <button class="action-btn view" data-test="show-recipe-button" @click="viewRecipe(rezept)">
                 <span class="btn-icon">👁️</span>
                 Anzeigen
               </button>
@@ -321,7 +321,7 @@
         </TransitionGroup>
 
         <!-- Empty State -->
-        <div v-if="filteredRecipes.length === 0 && !loading && !error" class="empty-state">
+        <div v-if="filteredRecipes.length === 0 && !loading && !error" class="empty-state" data-test="empty-state">
           <div class="empty-content">
             <div class="empty-icon">🍽️</div>
             <h3>Keine Rezepte gefunden</h3>

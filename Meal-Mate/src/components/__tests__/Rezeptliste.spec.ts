@@ -2,6 +2,8 @@ import { mount } from '@vue/test-utils'
 import { describe, it, expect, vi } from 'vitest'
 import Rezeptliste from '../Rezeptliste.vue'
 import { apiService } from '@/services/api.service'
+import { flushPromises } from '@vue/test-utils'
+
 
 vi.mock('@/services/api.service', () => ({
   apiService: {

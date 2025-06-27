@@ -19,7 +19,17 @@ describe('Rezeptliste.vue', () => {
       dauer: 30,
       portionen: 2,
       bewertung: 4,
-      zutaten: 'Mehl\nHefe\nSalz'
+      zutaten: 'Mehl\nTomaten\nMozzarella'
+    },
+    {
+      id: 2,
+      name: 'Pasta Carbonara',
+      kategorie: 'Abendessen',
+      zubereitung: 'Nudeln kochen...',
+      dauer: 20,
+      portionen: 4,
+      bewertung: 5,
+      zutaten: 'Nudeln\nEier\nSpeck'
     }
   ]
 
@@ -28,7 +38,7 @@ describe('Rezeptliste.vue', () => {
     const wrapper = mount(Rezeptliste)
 
     await wrapper.vm.$nextTick()
-    await wrapper.vm.$nextTick() // Warte auf zweites Update
+    await wrapper.vm.$nextTick()
 
     const emptyState = wrapper.find('[data-test="empty-state"]')
     expect(emptyState.exists()).toBe(true)
@@ -38,12 +48,12 @@ describe('Rezeptliste.vue', () => {
     vi.mocked(apiService.getAllRezepte).mockResolvedValue({ data: mockRezepte })
     const wrapper = mount(Rezeptliste)
 
-    // Warte auf async Daten
     await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
+    await flushPromises()
 
-    // Setze Filter
-    await wrapper.find('select[data-test="filter-select"]').setValue('Mittagessen')
+    const select = wrapper.find('[data-test="filter-select"]')
+    await select.setValue('Mittagessen')
     await wrapper.vm.$nextTick()
 
     const recipeCards = wrapper.findAll('[data-test="recipe-card"]')
@@ -54,13 +64,12 @@ describe('Rezeptliste.vue', () => {
     vi.mocked(apiService.getAllRezepte).mockResolvedValue({ data: mockRezepte })
     const wrapper = mount(Rezeptliste)
 
-    // Warte auf async Daten und Rendering
     await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
+    await flushPromises()
 
-    // Finde den Button und klicke
-    const showButton = wrapper.find('[data-test="show-recipe-button"]')
-    expect(showButton.exists()).toBe(true)
+    const firstCard = wrapper.find('[data-test="recipe-card"]')
+    const showButton = firstCard.find('[data-test="show-recipe-button"]')
     await showButton.trigger('click')
     await wrapper.vm.$nextTick()
 

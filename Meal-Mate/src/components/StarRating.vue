@@ -17,22 +17,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed } from 'vue'
 
 const props = defineProps<{
-  modelValue: number;
-  showValue?: boolean;
-}>();
+  modelValue: number
+  showValue?: boolean
+}>()
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: number): void;
-}>();
+  (e: 'update:modelValue', value: number): void
+}>()
 
-const rating = computed(() => props.modelValue);
-const hoverRating = ref(0);
+const rating = computed(() => props.modelValue)
+const hoverRating = ref(0)
 
 function updateRating(value: number) {
-  emit('update:modelValue', value);
+  emit('update:modelValue', value)
 }
 </script>
 

@@ -2,20 +2,16 @@
   <div class="timer-dropdown">
     <button @click="toggleTimer" class="timer-toggle">
       <span class="toggle-icon">⏰</span>
-      <span v-if="running" class="time-display">{{ minutes }}:{{ seconds < 10 ? '0' : '' }}{{ seconds }}</span>
+      <span v-if="running" class="time-display"
+        >{{ minutes }}:{{ seconds < 10 ? '0' : '' }}{{ seconds }}</span
+      >
     </button>
 
     <div v-show="isOpen" class="timer-menu">
       <div class="timer-container">
         <div class="time">{{ minutes }}:{{ seconds < 10 ? '0' : '' }}{{ seconds }}</div>
         <div class="time-input" v-if="!running">
-          <input
-            type="number"
-            v-model="inputMinutes"
-            min="0"
-            max="60"
-            @change="updateTime"
-          > min
+          <input type="number" v-model="inputMinutes" min="0" max="60" @change="updateTime" /> min
         </div>
         <div class="timer-buttons">
           <button @click="start" :disabled="running" class="timer-btn">
@@ -34,55 +30,55 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onUnmounted, computed } from 'vue';
+import { ref, onUnmounted, computed } from 'vue'
 
-const isOpen = ref(false);
-const inputMinutes = ref(5);
-const time = ref(5 * 60);
-const running = ref(false);
-let interval: ReturnType<typeof setInterval> | null = null;
+const isOpen = ref(false)
+const inputMinutes = ref(5)
+const time = ref(5 * 60)
+const running = ref(false)
+let interval: ReturnType<typeof setInterval> | null = null
 
-const minutes = computed(() => Math.floor(time.value / 60));
-const seconds = computed(() => time.value % 60);
+const minutes = computed(() => Math.floor(time.value / 60))
+const seconds = computed(() => time.value % 60)
 
 function toggleTimer() {
-  isOpen.value = !isOpen.value;
+  isOpen.value = !isOpen.value
 }
 
 function updateTime() {
-  time.value = inputMinutes.value * 60;
+  time.value = inputMinutes.value * 60
 }
 
 function start() {
   if (!running.value) {
-    running.value = true;
+    running.value = true
     interval = setInterval(() => {
       if (time.value > 0) {
-        time.value--;
+        time.value--
       } else {
-        pause();
+        pause()
       }
-    }, 1000);
+    }, 1000)
   }
-  isOpen.value = false;
+  isOpen.value = false
 }
 
 function pause() {
-  running.value = false;
+  running.value = false
   if (interval) {
-    clearInterval(interval);
-    interval = null;
+    clearInterval(interval)
+    interval = null
   }
 }
 
 function reset() {
-  pause();
-  time.value = inputMinutes.value * 60;
+  pause()
+  time.value = inputMinutes.value * 60
 }
 
 onUnmounted(() => {
-  if (interval) clearInterval(interval);
-});
+  if (interval) clearInterval(interval)
+})
 </script>
 
 <style scoped>

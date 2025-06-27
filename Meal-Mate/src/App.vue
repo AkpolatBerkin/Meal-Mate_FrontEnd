@@ -133,10 +133,19 @@ function updateTheme() {
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  25% { transform: translateY(-30px) rotate(2deg); }
-  50% { transform: translateY(-60px) rotate(-2deg); }
-  75% { transform: translateY(-30px) rotate(1deg); }
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-30px) rotate(2deg);
+  }
+  50% {
+    transform: translateY(-60px) rotate(-2deg);
+  }
+  75% {
+    transform: translateY(-30px) rotate(1deg);
+  }
 }
 
 /* Navigation */
@@ -147,7 +156,7 @@ function updateTheme() {
   backdrop-filter: blur(20px);
   background: var(--glass-background);
   border-bottom: 1px solid var(--glass-border);
-  height:70px;
+  height: 70px;
   border-radius: 10px;
 }
 
@@ -386,13 +395,24 @@ html {
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    'Roboto',
+    'Oxygen',
+    'Ubuntu',
+    'Cantarell',
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: var(--bg-primary);
   color: var(--text-primary);
   line-height: 1.6;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
   font-size: 16px;
 }
 
@@ -432,6 +452,9 @@ textarea:focus {
 }
 
 * {
-  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease;
 }
 </style>

@@ -34,9 +34,7 @@
         <Transition name="modal">
           <div v-if="showRecipeModal" class="modal-overlay" @click.self="showRecipeModal = false">
             <div class="modal-content">
-              <button class="modal-close" @click="showRecipeModal = false">
-                &times;
-              </button>
+              <button class="modal-close" @click="showRecipeModal = false">&times;</button>
 
               <div v-if="selectedRecipe" class="recipe-details">
                 <h2 class="recipe-title">{{ selectedRecipe.name }}</h2>
@@ -53,7 +51,10 @@
                   <div v-if="selectedRecipe.zutaten" class="recipe-ingredients">
                     <h3>Zutaten</h3>
                     <ul>
-                      <li v-for="(ingredient, index) in selectedRecipe.zutaten.split('\n')" :key="index">
+                      <li
+                        v-for="(ingredient, index) in selectedRecipe.zutaten.split('\n')"
+                        :key="index"
+                      >
                         {{ ingredient }}
                       </li>
                     </ul>
@@ -63,7 +64,6 @@
             </div>
           </div>
         </Transition>
-
 
         <div class="filters-section">
           <h3 class="section-title">🔍 Filter</h3>
@@ -221,9 +221,7 @@
               </div>
 
               <div class="form-actions">
-                <button type="button" @click="resetForm" class="btn-secondary">
-                  Zurücksetzen
-                </button>
+                <button type="button" @click="resetForm" class="btn-secondary">Zurücksetzen</button>
                 <button type="submit" :disabled="loading" class="btn-primary">
                   <span v-if="!loading">
                     <span class="button-icon">✨</span>
@@ -243,9 +241,7 @@
       <!-- Recipes Grid -->
       <section class="recipes-section">
         <div class="recipes-header">
-          <h2 class="section-title">
-            Ihre Rezepte ({{ filteredRecipes.length }})
-          </h2>
+          <h2 class="section-title">Ihre Rezepte ({{ filteredRecipes.length }})</h2>
           <div class="view-controls">
             <button
               @click="viewMode = 'grid'"
@@ -287,12 +283,12 @@
 
               <div class="recipe-meta">
                 <div class="meta-item">
-                    <span class="meta-icon">⭐</span>
-                    <StarRating
-                      v-model="rezept.bewertung"
-                      @update:modelValue="bewerteRezept(rezept, $event)"
-                      :showValue="true"
-                    />
+                  <span class="meta-icon">⭐</span>
+                  <StarRating
+                    v-model="rezept.bewertung"
+                    @update:modelValue="bewerteRezept(rezept, $event)"
+                    :showValue="true"
+                  />
                   <span class="meta-icon">⏱️</span>
                   <span>{{ rezept.dauer }} min</span>
                 </div>
@@ -308,10 +304,7 @@
                 <span class="btn-icon">👁️</span>
                 Anzeigen
               </button>
-              <button
-                class="action-btn edit"
-                @click="startEditing(rezept)"
-              >
+              <button class="action-btn edit" @click="startEditing(rezept)">
                 <span class="btn-icon">✏️</span>
                 Bearbeiten
               </button>
@@ -332,10 +325,14 @@
           <div class="empty-content">
             <div class="empty-icon">🍽️</div>
             <h3>Keine Rezepte gefunden</h3>
-            <p>{{ searchQuery ? 'Keine Rezepte entsprechen Ihrer Suche.' : 'Erstellen Sie Ihr erstes Rezept!' }}</p>
-            <button @click="scrollToForm" class="empty-action-btn">
-              Erstes Rezept hinzufügen
-            </button>
+            <p>
+              {{
+                searchQuery
+                  ? 'Keine Rezepte entsprechen Ihrer Suche.'
+                  : 'Erstellen Sie Ihr erstes Rezept!'
+              }}
+            </p>
+            <button @click="scrollToForm" class="empty-action-btn">Erstes Rezept hinzufügen</button>
           </div>
         </div>
       </section>
@@ -346,16 +343,17 @@
 import { ref, computed, onMounted } from 'vue'
 import axios from 'axios'
 import StarRating from './StarRating.vue'
+import { apiService } from '@/services/api.service'
 
 interface Rezept {
-  id: number;
-  name: string;
-  kategorie: string;
-  zubereitung: string;
-  dauer: number;
-  portionen: number;
-  zutaten?: string | null;
-  bewertung: number; // Neue Eigenschaft
+  id: number
+  name: string
+  kategorie: string
+  zubereitung: string
+  dauer: number
+  portionen: number
+  zutaten?: string | null
+  bewertung: number // Neue Eigenschaft
 }
 
 const rezepte = ref<Rezept[]>([])
@@ -368,15 +366,24 @@ const searchQuery = ref('')
 const selectedCategory = ref('')
 const selectedTimeRange = ref('')
 
+// Rezepte laden
+const loadRezepte = async () => {
+  try {
+    const response = await apiService.getAllRezepte()
+    rezepte.value = response.data
+  } catch (error) {
+    console.error('Fehler beim Laden der Rezepte:', error)
+  }
+}
+
 const neuesRezept = ref({
   name: '',
   kategorie: '',
   zubereitung: '',
   dauer: 0,
   portionen: 0,
-  bewertung: 0
+  bewertung: 0,
 })
-
 
 const selectedRecipe = ref<Rezept | null>(null)
 const showRecipeModal = ref(false)
@@ -389,14 +396,14 @@ const API_BASE_URL = 'https://meal-mate-backend-3gvc.onrender.com/api/rezept'
 
 // Computed Properties
 const categories = computed(() => {
-  const cats = [...new Set(rezepte.value.map(r => r.kategorie))]
+  const cats = [...new Set(rezepte.value.map((r) => r.kategorie))]
   return cats.sort()
 })
 
 const averageRating = computed(() => {
-  if (rezepte.value.length === 0) return '0';
-  const sum = rezepte.value.reduce((acc, r) => acc + (r.bewertung || 0), 0);
-  return (sum / rezepte.value.length).toFixed(1);
+  if (rezepte.value.length === 0) return '0'
+  const sum = rezepte.value.reduce((acc, r) => acc + (r.bewertung || 0), 0)
+  return (sum / rezepte.value.length).toFixed(1)
 })
 
 const averageTime = computed(() => {
@@ -411,26 +418,31 @@ const filteredRecipes = computed(() => {
   // Suchfilter
   if (searchQuery.value) {
     const query = searchQuery.value.toLowerCase()
-    filtered = filtered.filter(r =>
-      r.name.toLowerCase().includes(query) ||
-      r.kategorie.toLowerCase().includes(query) ||
-      r.zubereitung.toLowerCase().includes(query)
+    filtered = filtered.filter(
+      (r) =>
+        r.name.toLowerCase().includes(query) ||
+        r.kategorie.toLowerCase().includes(query) ||
+        r.zubereitung.toLowerCase().includes(query),
     )
   }
 
   // Kategorie-Filter
   if (selectedCategory.value) {
-    filtered = filtered.filter(r => r.kategorie === selectedCategory.value)
+    filtered = filtered.filter((r) => r.kategorie === selectedCategory.value)
   }
 
   // Zeit-Filter
   if (selectedTimeRange.value) {
-    filtered = filtered.filter(r => {
+    filtered = filtered.filter((r) => {
       switch (selectedTimeRange.value) {
-        case 'quick': return r.dauer < 30
-        case 'medium': return r.dauer >= 30 && r.dauer <= 60
-        case 'long': return r.dauer > 60
-        default: return true
+        case 'quick':
+          return r.dauer < 30
+        case 'medium':
+          return r.dauer >= 30 && r.dauer <= 60
+        case 'long':
+          return r.dauer > 60
+        default:
+          return true
       }
     })
   }
@@ -446,7 +458,7 @@ async function ladeRezepte() {
 
   try {
     const response = await axios.get(API_BASE_URL, {
-      timeout: 15000
+      timeout: 15000,
     })
     rezepte.value = response.data
   } catch (err: any) {
@@ -465,9 +477,9 @@ async function ladeRezepte() {
 async function bewerteRezept(rezept: Rezept, newRating: number) {
   try {
     // Optimistische Aktualisierung
-    const index = rezepte.value.findIndex(r => r.id === rezept.id);
+    const index = rezepte.value.findIndex((r) => r.id === rezept.id)
     if (index !== -1) {
-      rezepte.value[index] = { ...rezept, bewertung: newRating };
+      rezepte.value[index] = { ...rezept, bewertung: newRating }
     }
 
     // Backend-Update mit vollständigem Objekt
@@ -479,27 +491,26 @@ async function bewerteRezept(rezept: Rezept, newRating: number) {
       dauer: rezept.dauer,
       portionen: rezept.portionen,
       zutaten: rezept.zutaten,
-      bewertung: newRating
-    };
+      bewertung: newRating,
+    }
 
-    await axios.put(`${API_BASE_URL}/${rezept.id}`, updatedRezept);
+    await axios.put(`${API_BASE_URL}/${rezept.id}`, updatedRezept)
 
     // Kein erneutes Laden nötig, da optimistische Aktualisierung
   } catch (err) {
     // Fehlerbehandlung
-    const index = rezepte.value.findIndex(r => r.id === rezept.id);
+    const index = rezepte.value.findIndex((r) => r.id === rezept.id)
     if (index !== -1) {
-      rezepte.value[index] = { ...rezept }; // Setze ursprünglichen Wert zurück
+      rezepte.value[index] = { ...rezept } // Setze ursprünglichen Wert zurück
     }
-    error.value = true;
-    errorMessage.value = 'Fehler beim Bewerten des Rezepts';
+    error.value = true
+    errorMessage.value = 'Fehler beim Bewerten des Rezepts'
     setTimeout(() => {
-      error.value = false;
-      errorMessage.value = '';
-    }, 3000);
+      error.value = false
+      errorMessage.value = ''
+    }, 3000)
   }
 }
-
 
 async function rezeptHinzufuegen() {
   if (loading.value) return
@@ -509,14 +520,12 @@ async function rezeptHinzufuegen() {
 
   try {
     // Speichere aktuelle Bewertungen
-    const currentRatings = new Map(
-      rezepte.value.map((r: Rezept) => [r.id, r.bewertung])
-    )
+    const currentRatings = new Map(rezepte.value.map((r: Rezept) => [r.id, r.bewertung]))
 
     // Füge neues Rezept hinzu
     await axios.post(API_BASE_URL, neuesRezept.value, {
       timeout: 15000,
-      headers: { 'Content-Type': 'application/json' }
+      headers: { 'Content-Type': 'application/json' },
     })
 
     // Lade Rezepte neu
@@ -525,7 +534,7 @@ async function rezeptHinzufuegen() {
     // Stelle Bewertungen wieder her
     rezepte.value = response.data.map((r: Rezept) => ({
       ...r,
-      bewertung: currentRatings.get(r.id) || r.bewertung || 0
+      bewertung: currentRatings.get(r.id) || r.bewertung || 0,
     }))
 
     resetForm()
@@ -555,7 +564,14 @@ function startEditing(rezept: Rezept) {
 }
 
 function resetForm() {
-  neuesRezept.value = { name: '', kategorie: '', zubereitung: '', dauer: 0, portionen: 0,bewertung: 0 }
+  neuesRezept.value = {
+    name: '',
+    kategorie: '',
+    zubereitung: '',
+    dauer: 0,
+    portionen: 0,
+    bewertung: 0,
+  }
 }
 
 function toggleForm() {
@@ -570,7 +586,6 @@ function scrollToForm() {
 function truncateText(text: string, maxLength: number) {
   return text.length > maxLength ? text.substring(0, maxLength) + '...' : text
 }
-
 
 onMounted(() => {
   ladeRezepte()
@@ -1029,7 +1044,7 @@ onMounted(() => {
 /* Spezifische Styles für Listen-Ansicht */
 .recipe-card.list {
   padding: 1.5rem;
-  display: flex;  /* Änderung von grid zu flex */
+  display: flex; /* Änderung von grid zu flex */
   flex-direction: row;
   align-items: flex-start;
   gap: 2rem;
@@ -1040,7 +1055,7 @@ onMounted(() => {
 .recipe-card.list .recipe-actions {
   flex-direction: column;
   gap: 0.8rem;
-  width: 120px;  /* Fixe Breite für Aktions-Buttons */
+  width: 120px; /* Fixe Breite für Aktions-Buttons */
   flex-shrink: 0; /* Verhindert Schrumpfen */
 }
 
@@ -1158,7 +1173,6 @@ onMounted(() => {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-
 .action-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
@@ -1209,8 +1223,12 @@ onMounted(() => {
 
 /* Animations */
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .slide-down-enter-active,
@@ -1284,7 +1302,6 @@ onMounted(() => {
   gap: 0.8rem;
   margin-top: auto;
 }
-
 
 /* Responsive Anpassungen */
 @media (max-width: 1200px) {
@@ -1407,7 +1424,9 @@ onMounted(() => {
 
 .modal-enter-active .modal-content,
 .modal-leave-active .modal-content {
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
 }
 
 .modal-enter-from .modal-content,
@@ -1427,5 +1446,4 @@ onMounted(() => {
 .recipe-meta .meta-item .rating-value {
   font-size: 0.9rem;
 }
-
 </style>

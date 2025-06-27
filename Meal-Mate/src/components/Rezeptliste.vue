@@ -532,7 +532,7 @@ async function rezeptHinzufuegen() {
     })
 
     // Lade Rezepte neu
-    const response = await axios.get(API_BASE_URL)
+    const response = await apiService.getAllRezepte()
 
     // Stelle Bewertungen wieder her
     rezepte.value = response.data.map((r: Rezept) => ({

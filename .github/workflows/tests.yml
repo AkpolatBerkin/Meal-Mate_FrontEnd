@@ -13,30 +13,22 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Debug info
+      - name: Show repository contents
         run: |
-          echo "Current directory:"
+          echo "Repository contents:"
           pwd
-          echo "Directory contents:"
           ls -la
-          echo "Git status:"
-          git status
+          git branch
+          git rev-parse HEAD
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
 
       - name: Install dependencies
-        run: |
-          cd $GITHUB_WORKSPACE
-          npm ci
+        run: npm ci
 
       - name: Run unit tests
-        run: |
-          cd $GITHUB_WORKSPACE
-          npm run test:unitst:unit
+        run: npm run test:unit

@@ -9,20 +9,25 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Debug directory
+        run: |
+          pwd
+          ls -la
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          cache: 'npm'
-
-      - name: Clear npm cache
-        run: npm cache clean --force
+          node-version: '20'
 
       - name: Install dependencies
+        working-directory: ./
         run: npm ci
 
-      - name: Run tests
+      - name: Run unit tests
+        working-directory: ./
         run: npm run test:unit

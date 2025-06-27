@@ -11,24 +11,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Debug before checkout
-        run: |
-          echo "Current directory before checkout:"
-          pwd
-          ls -la
-
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          path: frontend
 
-      - name: Debug after checkout
+      - name: Debug repository structure
         run: |
-          echo "Current directory after checkout:"
-          pwd
-          echo "Repository contents:"
-          cd frontend
+          echo "Repository structure:"
           ls -la
+          echo "Meal-Mate contents:"
+          ls -la Meal-Mate
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -36,9 +27,9 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        working-directory: ./frontend
+        working-directory: ./Meal-Mate
         run: npm ci
 
       - name: Run unit tests
-        working-directory: ./frontend
+        working-directory: ./Meal-Mate
         run: npm run test:unit

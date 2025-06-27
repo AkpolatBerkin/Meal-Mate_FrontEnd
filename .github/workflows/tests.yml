@@ -11,16 +11,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Show repository contents
+      - name: Debug before checkout
         run: |
-          echo "Repository contents:"
+          echo "Current directory before checkout:"
           pwd
           ls -la
-          git branch
-          git rev-parse HEAD
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          path: frontend
+
+      - name: Debug after checkout
+        run: |
+          echo "Current directory after checkout:"
+          pwd
+          echo "Repository contents:"
+          cd frontend
+          ls -la
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -28,7 +36,9 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
+        working-directory: ./frontend
         run: npm ci
 
       - name: Run unit tests
+        working-directory: ./frontend
         run: npm run test:unit

@@ -322,7 +322,7 @@
         </TransitionGroup>
 
         <!-- Empty State -->
-        <div v-if="filteredRecipes.length === 0 && !loading && !error"
+        <div v-if="!rezepte || rezepte.length === 0"
              class="empty-state"
              data-test="empty-state">
           <div class="empty-content">

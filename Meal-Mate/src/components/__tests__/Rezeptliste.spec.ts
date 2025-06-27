@@ -1,4 +1,3 @@
-// src/components/__tests__/Rezeptliste.spec.ts
 import { mount } from '@vue/test-utils'
 import { describe, it, expect, vi } from 'vitest'
 import Rezeptliste from '../Rezeptliste.vue'
@@ -28,30 +27,34 @@ describe('Rezeptliste.vue', () => {
     }
   ]
 
-  // Korrektur für leere Liste Test
   it('zeigt leere Liste wenn keine Rezepte vorhanden', async () => {
     const wrapper = mount(Rezeptliste, {
       props: {
-        recipes: [] // Leeres Array
+        rezepte: [] // Geändert von recipes zu rezepte
       }
     })
     await wrapper.vm.$nextTick()
 
-    // Stellen Sie sicher, dass diese CSS-Klassen in der Komponente existieren
-    const emptyState = wrapper.find('[data-test="empty-state"]') // Besserer Selektor
+    const emptyState = wrapper.find('[data-test="empty-state"]')
     expect(emptyState.exists()).toBe(true)
   })
 
-  // Korrektur für Filter Test
   it('filtert Rezepte nach Kategorie', async () => {
-    const testRecipes = [
-      {id: 1, title: 'Pizza Margherita', category: 'Mittagessen'},
-      {id: 2, title: 'Pasta', category: 'Abendessen'}
+    const testRezepte = [ // Geändert von testRecipes zu testRezepte
+      {
+        id: 1,
+        name: 'Pizza Margherita', // Geändert von title zu name
+        kategorie: 'Mittagessen', // Geändert von category zu kategorie
+        zubereitung: 'Test',
+        dauer: 30,
+        portionen: 2,
+        bewertung: 4
+      }
     ]
 
     const wrapper = mount(Rezeptliste, {
       props: {
-        recipes: testRecipes
+        rezepte: testRezepte // Geändert von recipes zu rezepte
       }
     })
 
@@ -62,11 +65,18 @@ describe('Rezeptliste.vue', () => {
     expect(recipeCards).toHaveLength(1)
   })
 
-  // Korrektur für Modal Test
   it('öffnet Modal beim Klick auf Anzeigen-Button', async () => {
     const wrapper = mount(Rezeptliste, {
       props: {
-        recipes: [{id: 1, title: 'Test Rezept'}]
+        rezepte: [{
+          id: 1,
+          name: 'Test Rezept', // Geändert von title zu name
+          kategorie: 'Test',
+          zubereitung: 'Test',
+          dauer: 30,
+          portionen: 2,
+          bewertung: 0
+        }]
       }
     })
 

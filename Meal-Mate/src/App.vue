@@ -10,6 +10,7 @@
     <!-- Navigation Bar -->
     <nav class="navbar">
       <div class="nav-container">
+        <!-- Logo-Bereich -->
         <div class="nav-left">
           <div class="logo">
             <span class="logo-icon">🍽️</span>
@@ -28,10 +29,13 @@
         </div>
 
         <div class="nav-right">
-          <button @click="toggleDarkMode" class="theme-toggle">
-            <span class="toggle-icon">{{ isDarkMode ? '🌙' : '☀️' }}</span>
-            <span class="toggle-text">{{ isDarkMode ? 'Dark' : 'Light' }}</span>
-          </button>
+          <div class="nav-buttons">
+            <Timer />
+            <button @click="toggleDarkMode" class="theme-toggle">
+              <span class="toggle-icon">{{ isDarkMode ? '🌙' : '☀️' }}</span>
+              <span class="toggle-text">{{ isDarkMode ? 'Dark' : 'Light' }}</span>
+            </button>
+          </div>
         </div>
       </div>
     </nav>
@@ -45,7 +49,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-
+import Timer from './components/Timer.vue'
 const isDarkMode = ref(false)
 
 onMounted(() => {
@@ -149,11 +153,12 @@ function updateTheme() {
 
 .nav-container {
   width: 100%;
-  padding: 0 1rem;
+  padding: 0 2rem;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 2rem;
 }
 
 .nav-left {
@@ -242,6 +247,12 @@ function updateTheme() {
 
 .nav-right {
   flex: 0 0 auto;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
 }
 
 .theme-toggle {

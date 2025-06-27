@@ -11,23 +11,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Debug directory
+      - name: Debug info
         run: |
+          echo "Current directory:"
           pwd
+          echo "Directory contents:"
           ls -la
+          echo "Git status:"
+          git status
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
 
       - name: Install dependencies
-        working-directory: ./
-        run: npm ci
+        run: |
+          cd $GITHUB_WORKSPACE
+          npm ci
 
       - name: Run unit tests
-        working-directory: ./
-        run: npm run test:unit
+        run: |
+          cd $GITHUB_WORKSPACE
+          npm run test:unitst:unit

@@ -2,7 +2,7 @@
 import axios from 'axios'
 
 const API_URL = import.meta.env.PROD
-  ? 'https://meal-mate-backend.onrender.com/api'
+  ? 'https://meal-mate-backend-3gvc.onrender.com/api'
   : 'http://localhost:8080/api'
 
 export const apiService = {
